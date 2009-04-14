@@ -12,6 +12,8 @@ module HTTParty
       self.options = {
         :limit => o.delete(:no_follow) ? 0 : 5, 
         :default_params => {},
+        :read_timeout => o.delete(:read_timeout),
+        :open_timeout => o.delete(:open_timeout)
       }.merge(o)
     end
 
@@ -45,6 +47,8 @@ module HTTParty
         http = Net::HTTP.new(uri.host, uri.port, options[:http_proxyaddr], options[:http_proxyport])
         http.use_ssl = (uri.port == 443)
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        http.read_timeout = options[:read_timeout] if options[:read_timeout]
+        http.open_timeout = options[:open_timeout] if options[:open_timeout]
         http
       end
 
