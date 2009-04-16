@@ -41,6 +41,16 @@ describe HTTParty::Request do
       @request.send(:setup_raw_request)
       @request.instance_variable_get(:@raw_request)['authorization'].should_not be_nil
     end
+
+    it "should set http.read_timeout when configured" do
+      request = HTTParty::Request.new(Net::HTTP::Get, 'https://api.foo.com/v1:443', :read_timeout => 7)
+      request.send(:http).read_timeout.should == 7
+    end
+
+    it "should set http.open_timeout when configured" do
+      request = HTTParty::Request.new(Net::HTTP::Get, 'https://api.foo.com/v1:443', :open_timeout => 7)
+      request.send(:http).open_timeout.should == 7
+    end
   end
   
   describe '#format_from_mimetype' do
